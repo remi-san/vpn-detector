@@ -1,0 +1,39 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+use Symfony\Component\Console\Extended\OptionAwareApplication;
+use Symfony\Component\Dotenv\Dotenv;
+use VPNDetector\Command\VPNDetectorCommand;
+use VPNDetector\LocalRemoteVPNDetector;
+
+$autoloadFiles = [
+    $GLOBALS['_composer_autoload_path'] ?? null, // composer var
+    __DIR__ . '/../../../autoload.php', // composer bin
+    __DIR__ . '/../vendor/autoload.php', // local
+];
+
+foreach ($autoloadFiles as $autoloadFile) {
+    if ($autoloadFile !== null && file_exists($autoloadFile)) {
+        require $autoloadFile;
+    }
+}
+
+$dotenv = new Dotenv();
+$dotenv->loadEnv('.env');
+
+$app = new OptionAwareApplication('VPNDetector', '0.1.0');
+$app->add(
+    new VPNDetectorCommand(
+        LocalRemoteVPNDetector::livebox(
+            options: [
+                'url'      => $_ENV['LIVEBOX_URL'],
+                'username' => $_ENV['LIVEBOX_USR'],
+                'password' => $_ENV['LIVEBOX_PWD'],
+            ]
+        )
+    )
+);
+$app->setDefaultCommand('vpn:detect', true);
+$app->run();
