@@ -9,7 +9,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\HttpClient\MockHttpClient;
 use VPNDetector\Exception\IPAddressResolvingException;
 use VPNDetector\IPAddress;
 use VPNDetector\IPAddressResolver;
@@ -68,18 +67,6 @@ final class VPNDetectorTest extends TestCase
         $_this->it_should_inform_me_I_am_not($_behindVPN);
     }
 
-    /**
-     * @throws IPAddressResolvingException
-     */
-    #[Test]
-    public function it_should_build_the_detector_for_a_livebox(): void
-    {
-        $_this = $this; // #ignoreLine
-
-        $_this->given_a_badly_configured_livebox_VPN_detector();
-        $_this->it_should_fail()->detecting_if_it_is_behind_a_VPN();
-    }
-
     // Util
 
     private function given(mixed ...$args): self
@@ -124,11 +111,6 @@ final class VPNDetectorTest extends TestCase
         self::assertNotNull($this->localIPAddress);
         self::assertNotNull($this->remoteIPAddress);
         self::assertFalse($this->remoteIPAddress->equals($this->localIPAddress));
-    }
-
-    private function given_a_badly_configured_livebox_VPN_detector(): void
-    {
-        $this->VPNDetector = LocalRemoteVPNDetector::livebox(new MockHttpClient());
     }
 
     // 2. Act

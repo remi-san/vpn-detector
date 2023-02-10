@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace VPNDetector\IPProvider\Livebox;
+namespace VPNDetector\Resolver\IPProvider\Livebox;
 
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace VPNDetector\Tests\IPProvider\Livebox;
+namespace VPNDetector\Tests\Resolver\IPProvider\Livebox;
 
 use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -11,10 +11,10 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use VPNDetector\Exception\IPAddressResolvingException;
 use VPNDetector\IPAddress;
-use VPNDetector\IPProvider\Livebox\LiveboxAdminAPI;
-use VPNDetector\IPProvider\Livebox\LiveboxAdminAPIException;
-use VPNDetector\IPProvider\Livebox\LiveboxIPAddressResolver;
-use VPNDetector\IPProvider\Livebox\LiveboxIPAddressResolvingException;
+use VPNDetector\Resolver\IPProvider\Livebox\LiveboxAdminAPI;
+use VPNDetector\Resolver\IPProvider\Livebox\LiveboxAdminAPIException;
+use VPNDetector\Resolver\IPProvider\Livebox\LiveboxIPAddressResolver;
+use VPNDetector\Resolver\IPProvider\Livebox\LiveboxIPAddressResolvingException;
 
 #[Group('unit')]
 #[Group('network')]

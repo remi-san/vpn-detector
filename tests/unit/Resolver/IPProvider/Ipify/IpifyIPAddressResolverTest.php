@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace VPNDetector\Tests\IPProvider\Ipify;
+namespace VPNDetector\Tests\Resolver\IPProvider\Ipify;
 
 use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -13,9 +13,9 @@ use Symfony\Component\HttpClient\Exception\ClientException;
 use Symfony\Component\HttpClient\Response\MockResponse;
 use VPNDetector\Exception\IPAddressResolvingException;
 use VPNDetector\IPAddress;
-use VPNDetector\IPProvider\Ipify\IpifyAPI;
-use VPNDetector\IPProvider\Ipify\IpifyIPAddressResolver;
-use VPNDetector\IPProvider\Ipify\IpifyIPAddressResolvingException;
+use VPNDetector\Resolver\IPProvider\Ipify\IpifyAPI;
+use VPNDetector\Resolver\IPProvider\Ipify\IpifyIPAddressResolver;
+use VPNDetector\Resolver\IPProvider\Ipify\IpifyIPAddressResolvingException;
 
 #[Group('unit')]
 #[Group('network')]

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace VPNDetector\Tests\IPProvider\Util;
+namespace VPNDetector\Tests\Resolver\IPProvider\Util;
 
 final class HealthCheck
 {

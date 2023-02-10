@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace VPNDetector\IPProvider\Ipify;
+namespace VPNDetector\Resolver\IPProvider\Ipify;
 
 use VPNDetector\Exception\IPAddressResolvingException;
 

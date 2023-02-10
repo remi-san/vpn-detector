@@ -34,10 +34,10 @@ return static function (RectorConfig $rectorConfig): void {
 
     $rectorConfig->skip([
         RemoveEmptyMethodCallRector::class => [
-            __DIR__.'/tests/unit/IPProvider/Livebox/LiveboxAdminAPIClientIntegrationTest.php',
+            __DIR__.'/tests/unit/Resolver/IPProvider/Livebox/LiveboxAdminAPIClientIntegrationTest.php',
         ],
         RemoveEmptyClassMethodRector::class => [
-            __DIR__.'/tests/unit/IPProvider/Livebox/LiveboxAdminAPIClientIntegrationTest.php',
+            __DIR__.'/tests/unit/Resolver/IPProvider/Livebox/LiveboxAdminAPIClientIntegrationTest.php',
         ],
         RemoveUnusedPrivateMethodParameterRector::class => [
             __DIR__.'/tests/unit/VPNDetectorTest.php',

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace VPNDetector\Tests\IPProvider\Livebox;
+namespace VPNDetector\Tests\Resolver\IPProvider\Livebox;
 
-use VPNDetector\IPProvider\Livebox\LiveboxAdminAPIClient;
+use VPNDetector\Resolver\IPProvider\Livebox\LiveboxAdminAPIClient;
 
 final readonly class LiveboxUser
 {

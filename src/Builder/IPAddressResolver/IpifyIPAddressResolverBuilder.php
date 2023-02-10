@@ -6,7 +6,7 @@ namespace VPNDetector\Builder\IPAddressResolver;
 
 use VPNDetector\Builder\IPAddressResolverBuilder;
 use VPNDetector\IPAddressResolver;
-use VPNDetector\IPProvider\Ipify\IpifyIPAddressResolver;
+use VPNDetector\Resolver\IPProvider\Ipify\IpifyIPAddressResolver;
 
 final class IpifyIPAddressResolverBuilder implements IPAddressResolverBuilder
 {

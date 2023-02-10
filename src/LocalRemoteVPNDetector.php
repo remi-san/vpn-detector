@@ -4,10 +4,7 @@ declare(strict_types=1);
 
 namespace VPNDetector;
 
-use Symfony\Contracts\HttpClient\HttpClientInterface;
 use VPNDetector\Exception\IPAddressResolvingException;
-use VPNDetector\IPProvider\Ipify\IpifyIPAddressResolver;
-use VPNDetector\IPProvider\Livebox\LiveboxIPAddressResolver;
 
 final readonly class LocalRemoteVPNDetector implements VPNDetector
 {
@@ -33,20 +30,5 @@ final readonly class LocalRemoteVPNDetector implements VPNDetector
         IPAddressResolver $remoteIpAddressResolver
     ): self {
         return new self($localIpAddressResolver, $remoteIpAddressResolver);
-    }
-
-    /**
-     * @see LiveboxAdminAPIClient::build for $options definition
-     *
-     * @param array<string, string> $options
-     */
-    public static function livebox(
-        ?HttpClientInterface $httpClient = null,
-        array $options = []
-    ): self {
-        return self::build(
-            LiveboxIPAddressResolver::build($httpClient, $options),
-            IpifyIPAddressResolver::build($httpClient)
-        );
     }
 }

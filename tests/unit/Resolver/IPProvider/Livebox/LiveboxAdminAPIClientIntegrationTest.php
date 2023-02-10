@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace VPNDetector\Tests\IPProvider\Livebox;
+namespace VPNDetector\Tests\Resolver\IPProvider\Livebox;
 
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use VPNDetector\IPAddressResolver;
-use VPNDetector\IPProvider\Livebox\LiveboxAdminAPIClient;
-use VPNDetector\IPProvider\Livebox\LiveboxAdminAPIException;
-use VPNDetector\Tests\IPProvider\Util\HealthCheck;
+use VPNDetector\Resolver\IPProvider\Livebox\LiveboxAdminAPIClient;
+use VPNDetector\Resolver\IPProvider\Livebox\LiveboxAdminAPIException;
+use VPNDetector\Tests\Resolver\IPProvider\Util\HealthCheck;
 
 #[Group('integration')]
 #[Group('network')]
@@ -105,11 +105,11 @@ final class LiveboxAdminAPIClientIntegrationTest extends TestCase
         $_this->I_should_get_an_error()->when_I_ask_for_the_WAN_status();
     }
 
-    // 1. Arrange
+   // 1. Arrange
 
-    private function given_no_user_is_authenticated(): void
-    {
-    }
+   private function given_no_user_is_authenticated(): void
+   {
+   }
 
     private function an_existing_user(): LiveboxUser
     {

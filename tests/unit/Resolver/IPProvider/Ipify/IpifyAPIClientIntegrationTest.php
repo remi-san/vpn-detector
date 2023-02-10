@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace VPNDetector\Tests\IPProvider\Ipify;
+namespace VPNDetector\Tests\Resolver\IPProvider\Ipify;
 
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpClient\Exception\JsonException;
 use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
-use VPNDetector\IPProvider\Ipify\IpifyAPIClient;
-use VPNDetector\Tests\IPProvider\Util\HealthCheck;
+use VPNDetector\Resolver\IPProvider\Ipify\IpifyAPIClient;
+use VPNDetector\Tests\Resolver\IPProvider\Util\HealthCheck;
 
 #[Group('integration')]
 #[Group('network')]

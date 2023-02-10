@@ -6,7 +6,7 @@ namespace VPNDetector\Builder\IPAddressResolver;
 
 use VPNDetector\Builder\IPAddressResolverBuilder;
 use VPNDetector\IPAddressResolver;
-use VPNDetector\IPProvider\Livebox\LiveboxIPAddressResolver;
+use VPNDetector\Resolver\IPProvider\Livebox\LiveboxIPAddressResolver;
 
 final class LiveboxIPAddressResolverBuilder implements IPAddressResolverBuilder
 {
