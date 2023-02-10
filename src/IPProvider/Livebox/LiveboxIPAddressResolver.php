@@ -32,7 +32,7 @@ final readonly class LiveboxIPAddressResolver implements IPAddressResolver
     }
 
     /**
-     * @param array<string, string> $options
+     * @param array<string, ?string> $options
      *
      *@see LiveboxAdminAPIClient::build for $options definition
      */

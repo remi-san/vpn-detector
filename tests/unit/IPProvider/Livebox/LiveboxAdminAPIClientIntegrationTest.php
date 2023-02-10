@@ -7,6 +7,7 @@ namespace VPNDetector\Tests\IPProvider\Livebox;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use VPNDetector\IPAddressResolver;
 use VPNDetector\IPProvider\Livebox\LiveboxAdminAPIClient;
 use VPNDetector\IPProvider\Livebox\LiveboxAdminAPIException;
 use VPNDetector\Tests\IPProvider\Util\HealthCheck;
@@ -167,9 +168,9 @@ final class LiveboxAdminAPIClientIntegrationTest extends TestCase
         $this->liveboxAdminAPIClient ??= LiveboxAdminAPIClient::build(
             null,
             [
-                LiveboxAdminAPIClient::LIVEBOX_URL_PARAM => $this->url,
-                LiveboxAdminAPIClient::LIVEBOX_USR_PARAM => $user->username,
-                LiveboxAdminAPIClient::LIVEBOX_PWD_PARAM => $user->password,
+                IPAddressResolver::URL_PARAM      => $this->url,
+                IPAddressResolver::USER_PARAM     => $user->username,
+                IPAddressResolver::PASSWORD_PARAM => $user->password,
             ]
         );
     }

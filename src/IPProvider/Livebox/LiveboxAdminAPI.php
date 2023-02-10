@@ -6,6 +6,10 @@ namespace VPNDetector\IPProvider\Livebox;
 
 interface LiveboxAdminAPI
 {
+    public const DEFAULT_URL      = 'http://192.168.1.1';
+    public const DEFAULT_USER     = 'admin';
+    public const DEFAULT_PASSWORD = 'admin';
+
     /**
      * @throws LiveboxAdminAPIException
      */

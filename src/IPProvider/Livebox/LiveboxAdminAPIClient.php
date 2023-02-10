@@ -13,17 +13,10 @@ use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
+use VPNDetector\IPAddressResolver;
 
 final class LiveboxAdminAPIClient implements LiveboxAdminAPI
 {
-    public const LIVEBOX_URL_PARAM = 'url';
-    public const LIVEBOX_USR_PARAM = 'username';
-    public const LIVEBOX_PWD_PARAM = 'password';
-
-    public const DEFAULT_URL      = 'http://192.168.1.1';
-    public const DEFAULT_USER     = 'admin';
-    public const DEFAULT_PASSWORD = 'admin';
-
     public const WEBSERVICE_PATH = '/ws';
 
     private const BASE_COOKIES = [
@@ -78,7 +71,7 @@ final class LiveboxAdminAPIClient implements LiveboxAdminAPI
                     'parameters' => [],
                 ]
             );
-        } catch (ExceptionInterface|LiveboxAdminAPIException $e) {
+        } catch (ExceptionInterface $e) {
             throw LiveboxAdminAPIException::from($e);
         }
     }
@@ -257,14 +250,14 @@ final class LiveboxAdminAPIClient implements LiveboxAdminAPI
      * Allowed options for configuration:
      * ```
      * $options = [
-     *     LiveboxAdminApiClient::LIVEBOX_URL_PARAM => '<livebox_http_url>', // defaults to 'http://192.168.1.1'
-     *     LiveboxAdminApiClient::LIVEBOX_USR_PARAM => '<livebox_username>', // defaults to 'admin'
-     *     LiveboxAdminApiClient::LIVEBOX_PWD_PARAM => '<livebox_password>', // defaults to 'admin'
+     *     IPAddressResolver::URL_PARAM      => '<livebox_http_url>', // defaults to 'http://192.168.1.1'
+     *     IPAddressResolver::USER_PARAM     => '<livebox_username>', // defaults to 'admin'
+     *     IPAddressResolver::PASSWORD_PARAM => '<livebox_password>', // defaults to 'admin'
      * ];
      * ```
      * All $options have a default value if not provided.
      *
-     * @param array<string, string> $options
+     * @param array<string, ?string> $options
      */
     public static function build(
         ?HttpClientInterface $httpClient = null,
@@ -276,9 +269,9 @@ final class LiveboxAdminAPIClient implements LiveboxAdminAPI
 
         return new self(
             $httpClient,
-            $options[self::LIVEBOX_URL_PARAM] ?? self::DEFAULT_URL,
-            $options[self::LIVEBOX_USR_PARAM] ?? self::DEFAULT_USER,
-            $options[self::LIVEBOX_PWD_PARAM] ?? self::DEFAULT_PASSWORD
+            $options[IPAddressResolver::URL_PARAM]      ?? self::DEFAULT_URL,
+            $options[IPAddressResolver::USER_PARAM]     ?? self::DEFAULT_USER,
+            $options[IPAddressResolver::PASSWORD_PARAM] ?? self::DEFAULT_PASSWORD
         );
     }
 }

@@ -11,9 +11,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 use VPNDetector\Exception\IPAddressResolvingException;
 use VPNDetector\VPNDetector;
 
-#[AsCommand(name: 'vpn:detect')]
+#[AsCommand(name: self::NAME, description: 'Detect if you are behind a VPN')]
 final class VPNDetectorCommand extends Command
 {
+    public const NAME = 'vpn:detect';
+
     public function __construct(
         private readonly VPNDetector $vpnDetector
     ) {

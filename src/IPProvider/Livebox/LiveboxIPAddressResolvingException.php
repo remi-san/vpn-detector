@@ -10,6 +10,6 @@ final class LiveboxIPAddressResolvingException extends \DomainException implemen
 {
     public static function from(\Throwable $e): self
     {
-        return new self('Could not retrieve IP address through Livebox.', $e->getCode(), $e->getPrevious());
+        return new self($e->getMessage(), $e->getCode(), $e->getPrevious());
     }
 }
