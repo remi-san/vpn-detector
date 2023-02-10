@@ -1,0 +1,32 @@
+# docker-compose.yml
+version: '3.8'
+services:
+  php:
+    image: remisan/php
+    restart: 'no'
+    volumes:
+      - .:/app:delegated
+    working_dir: /app
+    environment:
+      - "PHP_CS_FIXER_IGNORE_ENV=1"
+    depends_on:
+      - ipify
+      - livebox
+
+  ipify:
+    image: pactfoundation/pact-stub-server
+    command: -f pacts/pact-ipify.json -p 4148 -l debug --insecure-tls
+    ports:
+      - '4148:4148'
+    volumes:
+      - ./tests/pacts:/app/pacts:delegated
+    working_dir: /app
+
+  livebox:
+    image: pactfoundation/pact-stub-server
+    command: -f pacts/pact-livebox.json -p 1337 -l debug --insecure-tls
+    ports:
+      - '1337:1337'
+    volumes:
+      - ./tests/pacts:/app/pacts:delegated
+    working_dir: /app

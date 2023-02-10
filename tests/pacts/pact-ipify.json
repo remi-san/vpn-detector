@@ -1,0 +1,66 @@
+{
+  "consumer": {
+    "name": "tests"
+  },
+  "provider": {
+    "name": "ipify"
+  },
+  "interactions": [
+    {
+      "description": "A successful ipv4 call",
+      "request": {
+        "method": "GET",
+        "path": "/",
+        "query": "format=json",
+        "headers": {
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+        },
+        "body": {
+          "ip": "127.0.0.1"
+        }
+      }
+    },
+    {
+      "description": "A malformed ipv4 call",
+      "request": {
+        "method": "GET",
+        "path": "/malformed/",
+        "query": "format=json",
+        "headers": {
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+        },
+        "body": "{"
+      }
+    },
+    {
+      "description": "A missing ipv4 call",
+      "request": {
+        "method": "GET",
+        "path": "/missing/",
+        "query": "format=json",
+        "headers": {
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+        },
+        "body": {
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "pactSpecification": {
+      "version": "2.0.0"
+    }
+  }
+}

@@ -1,0 +1,188 @@
+{
+  "consumer": {
+    "name": "tests"
+  },
+  "provider": {
+    "name": "livebox"
+  },
+  "interactions": [
+    {
+      "description": "A successful login for admin/admin",
+      "request": {
+        "method": "POST",
+        "path": "/ws",
+        "headers": {
+          "Content-Type": "application/x-sah-ws-4-call+json",
+          "Cookie": "cdda1e19/accept-language=fr-FR,fr; UILang=fr",
+          "Authorization": "X-Sah-Login"
+        },
+        "body": {
+          "service": "sah.Device.Information",
+          "method": "createContext",
+          "parameters": {
+            "applicationName": "webui",
+            "username":  "admin",
+            "password": "admin"
+          }
+        },
+        "matchingRules": {
+          "$.headers.Content-Type": {
+            "match": "equality",
+            "regex": "application/x-sah-ws-4-call+json"
+          },
+          "$.headers.Cookie": {
+            "match": "equality",
+            "regex": "cdda1e19/accept-language=fr-FR,fr; UILang=fr"
+          },
+          "$.headers.Authorization": {
+            "match": "equality",
+            "regex": "X-Sah-Login"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/x-sah-ws-4-call+json",
+          "Set-Cookie": "cdda1e19/sessid=rjd3g8HKBALa8TDyMm0UUDL8; path=/; SameSite=Strict; HttpOnly"
+        },
+        "body": {
+          "status": 0,
+          "data": {
+            "contextID":"ixAF+fow8G8DyRz+fT4IBdJDBxZPRktLwS9lfCoG5ZcI6vaGsp4ZEUyi1RkhjfzU"
+          },
+          "username":"admin",
+          "groups":"http,admin"
+        }
+      }
+    },
+    {
+      "description": "A failed login for the others",
+      "request": {
+        "method": "POST",
+        "path": "/ws",
+        "headers": {
+          "Content-Type": "application/x-sah-ws-4-call+json"
+        },
+        "body": {
+          "service": "sah.Device.Information",
+          "method": "createContext",
+          "parameters": {
+            "applicationName": "webui",
+            "username":  "unknown",
+            "password": "unknownPwd"
+          }
+        },
+        "matchingRules": {
+          "$.headers.Content-Type": {
+            "match": "equality",
+            "regex": "application/x-sah-ws-4-call+json"
+          },
+          "$.headers.Cookie": {
+            "match": "equality",
+            "regex": "cdda1e19/accept-language=fr-FR,fr; UILang=fr"
+          },
+          "$.headers.Authorization": {
+            "match": "equality",
+            "regex": "X-Sah-Login"
+          }
+        }
+      },
+      "response": {
+        "status": 401,
+        "headers": {
+          "Content-Type": "application/x-sah-ws-4-call+json"
+        },
+        "body": {
+          "status": 1,
+          "data": {}
+        }
+      }
+    },
+    {
+      "description": "A successful WAN status retrieval for authenticated user",
+      "request": {
+        "method": "POST",
+        "path": "/ws",
+        "headers": {
+          "Content-Type": "application/x-sah-ws-4-call+json"
+        },
+        "body": {
+          "service": "NMC",
+          "method": "getWANStatus",
+          "parameters": []
+        },
+        "matchingRules": {
+          "$.headers.Content-Type": {
+            "match": "equality",
+            "regex": "application/x-sah-ws-4-call+json"
+          },
+          "$.headers.Cookie": {
+            "match": "equality",
+            "regex": "cdda1e19/accept-language=fr-FR,fr; UILang=fr; cdda1e19/sessid=rjd3g8HKBALa8TDyMm0UUDL8; sah/contextId=ixAF+fow8G8DyRz+fT4IBdJDBxZPRktLwS9lfCoG5ZcI6vaGsp4ZEUyi1RkhjfzU; lastKnownIpv6TabState=visible"
+          },
+          "$.headers.Authorization": {
+            "match": "equality",
+            "regex": "X-Sah ixAF+fow8G8DyRz+fT4IBdJDBxZPRktLwS9lfCoG5ZcI6vaGsp4ZEUyi1RkhjfzU"
+          },
+          "$.headers.X-Context": {
+            "match": "equality",
+            "regex": "ixAF+fow8G8DyRz+fT4IBdJDBxZPRktLwS9lfCoG5ZcI6vaGsp4ZEUyi1RkhjfzU"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/x-sah-ws-4-call+json"
+        },
+        "body": {
+          "status": true,
+          "data": {
+            "WanState": "up",
+            "LinkType": "sfp",
+            "LinkState": "up",
+            "MACAddress": "AA:BB:CC:DD:EE:FF",
+            "Protocol": "dhcp",
+            "ConnectionState": "Bound",
+            "LastConnectionError": "None",
+            "IPAddress": "1.2.3.4",
+            "RemoteGateway": "80.80.80.80",
+            "DNSServers": "80.80.80.1,80.80.80.2",
+            "IPv6Address": ""
+          }
+        }
+      }
+    },
+    {
+      "description": "A failed WAN status retrieval for unauthenticated user",
+      "request": {
+        "method": "POST",
+        "path": "/ws",
+        "headers": {
+          "Content-Type": "application/x-sah-ws-4-call+json"
+        },
+        "body": {
+          "service": "NMC",
+          "method": "getWANStatus",
+          "parameters": []
+        }
+      },
+      "response": {
+        "status": 401,
+        "headers": {
+          "Content-Type": "application/x-sah-ws-4-call+json"
+        },
+        "body": {
+          "status": false,
+          "data": {}
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "pactSpecification": {
+      "version": "2.0.0"
+    }
+  }
+}
