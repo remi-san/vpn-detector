@@ -13,7 +13,7 @@ final class IpifyIPAddressResolverBuilder implements IPAddressResolverBuilder
     use HttpClientTrait;
 
     /**
-     * @param array<string, string> $options
+     * @param array<string, ?string> $options
      */
     public function withOptions(array $options): self
     {

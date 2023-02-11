@@ -11,19 +11,7 @@ use VPNDetector\Resolver\IPProvider\Livebox\LiveboxIPAddressResolver;
 final class LiveboxIPAddressResolverBuilder implements IPAddressResolverBuilder
 {
     use HttpClientTrait;
-
-    /** @var array<string, ?string> */
-    private array $options = [];
-
-    /**
-     * @param array<string, ?string> $options
-     */
-    public function withOptions(array $options): self
-    {
-        $this->options = [...$this->options, ...$options];
-
-        return $this;
-    }
+    use OptionsTrait;
 
     public function build(): IPAddressResolver
     {

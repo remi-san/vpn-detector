@@ -9,7 +9,7 @@ use VPNDetector\IPAddressResolver;
 interface IPAddressResolverBuilder
 {
     /**
-     * @param array<string, string> $options
+     * @param array<string, ?string> $options
      */
     public function withOptions(array $options): self;
 

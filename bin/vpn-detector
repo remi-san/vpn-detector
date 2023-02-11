@@ -7,8 +7,8 @@ use Symfony\Component\Console\Extended\OptionAwareApplication;
 use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\HttpClient\HttpClient;
 use VPNDetector\Builder\IPAddressResolver\IPAddressResolvers;
-use VPNDetector\Builder\IPAddressResolverFactory;
-use VPNDetector\Builder\VPNDetectorBuilder;
+use VPNDetector\Builder\SimpleIPAddressResolverFactory;
+use VPNDetector\Builder\SimpleVPNDetectorBuilder;
 use VPNDetector\Command\VPNDetectorCommand;
 use VPNDetector\IPAddressResolver;
 
@@ -25,7 +25,10 @@ foreach ($autoloadFiles as $autoloadFile) {
 }
 
 $dotenv = new Dotenv();
-$dotenv->loadEnv('.env');
+try {
+    @$dotenv->loadEnv('.env');
+} catch (\Throwable $e) {
+}
 
 $resolverOptions = [
     IPAddressResolvers::LIVEBOX => [
@@ -33,15 +36,15 @@ $resolverOptions = [
         IPAddressResolver::USER_PARAM     => $_ENV['LIVEBOX_USR'] ?? null,
         IPAddressResolver::PASSWORD_PARAM => $_ENV['LIVEBOX_PWD'] ?? null,
     ],
+    IPAddressResolvers::FIXED  => [
+        IPAddressResolver::IP_PARAM       => $_ENV['FIXED_IP']    ?? null,
+    ],
 ];
 
-$httpClient = HttpClient::create();
-$ipResolverFactory = IPAddressResolverFactory::create($httpClient, $resolverOptions);
-$vpnDetectorBuilder = (new VPNDetectorBuilder())
-    ->withLocalIPAddressResolver($ipResolverFactory->build(IPAddressResolvers::IPIFY)->build())
-    ->withRemoteIPAddressResolver($ipResolverFactory->build(IPAddressResolvers::LIVEBOX)->build());
+$ipResolverFactory = SimpleIPAddressResolverFactory::create(HttpClient::create(), $resolverOptions);
+$vpnDetectorBuilder = (new SimpleVPNDetectorBuilder())->withRemoteIPAddressResolver($ipResolverFactory->build(IPAddressResolvers::IPIFY)->build());
 
 $app = new OptionAwareApplication('VPNDetector', '0.1.0');
-$app->add(new VPNDetectorCommand($vpnDetectorBuilder->build()));
+$app->add(new VPNDetectorCommand($ipResolverFactory, $vpnDetectorBuilder));
 $app->setDefaultCommand(VPNDetectorCommand::NAME, true);
 $app->run();

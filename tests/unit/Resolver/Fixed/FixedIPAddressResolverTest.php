@@ -25,20 +25,6 @@ final class FixedIPAddressResolverTest extends TestCase
         self::assertTrue($ip->equals($resolver->resolveIpAddress()));
     }
 
-    /**
-     * @throws IPAddressResolvingException
-     */
-    #[Test]
-    public function it_resolves_the_fixed_ip_if_given_afterwards(): void
-    {
-        $ip = IPAddress::v4('0.0.0.0');
-
-        $resolver = new FixedIPAddressResolver();
-        $resolver->setIpAddress($ip);
-
-        self::assertTrue($ip->equals($resolver->resolveIpAddress()));
-    }
-
     #[Test]
     public function it_cannot_resolve_the_fixed_ip_if_not_given_any(): void
     {

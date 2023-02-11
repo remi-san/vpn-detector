@@ -30,4 +30,17 @@ final readonly class IPAddress
     {
         return new self(null, $ip);
     }
+
+    public static function create(string $ip): self
+    {
+        if (filter_var($ip, \FILTER_VALIDATE_IP, \FILTER_FLAG_IPV4) !== false) {
+            return self::v4($ip);
+        }
+
+        if (filter_var($ip, \FILTER_VALIDATE_IP, \FILTER_FLAG_IPV6) !== false) {
+            return self::v6($ip);
+        }
+
+        throw new \InvalidArgumentException('Invalid IP address.');
+    }
 }
