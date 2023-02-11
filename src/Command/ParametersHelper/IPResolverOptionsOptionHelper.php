@@ -12,9 +12,9 @@ use VPNDetector\IPAddressResolver;
 final class IPResolverOptionsOptionHelper
 {
     private const ARG_IP_ADDRESS        = 'fixed-ip';
-    private const ARG_RESOLVER_URL      = 'resolver-url';
-    private const ARG_RESOLVER_USERNAME = 'resolver-username';
-    private const ARG_RESOLVER_PASSWORD = 'resolver-password';
+    private const ARG_RESOLVER_URL      = 'url';
+    private const ARG_RESOLVER_USERNAME = 'username';
+    private const ARG_RESOLVER_PASSWORD = 'password';
 
     /**
      * @return array<InputOption>
@@ -44,9 +44,9 @@ final class IPResolverOptionsOptionHelper
 
     private static function getOption(InputInterface $input, string $optionName): ?string
     {
-        $ip = $input->getOption($optionName);
-        Assert::that($ip)->nullOr()->string();
+        $option = $input->getOption($optionName);
+        Assert::that($option)->nullOr()->string();
 
-        return $ip;
+        return $option;
     }
 }

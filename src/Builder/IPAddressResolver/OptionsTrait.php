@@ -14,7 +14,7 @@ trait OptionsTrait
      */
     public function withOptions(array $options): self
     {
-        $this->options = [...$this->options, ...$options];
+        $this->options = [...$this->options, ...array_filter($options)];
 
         return $this;
     }
