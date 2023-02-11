@@ -3,6 +3,12 @@
 
 declare(strict_types=1);
 
+
+use Monolog\Extended\Formatter\Factory\NormalizedFormatterFactory;
+use Monolog\Extended\Normalizer\JsonSerializableNormalizer;
+use Monolog\Processor\MemoryUsageProcessor;use Symfony\Bridge\Monolog\Logger;
+use Symfony\Component\Console\Extended\Logger\Formatter\Factory\ConsoleFormatterFactory;
+use Symfony\Component\Console\Extended\Option\ConsoleLoggerFormatApplicationOption;
 use Symfony\Component\Console\Extended\OptionAwareApplication;
 use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\HttpClient\HttpClient;
@@ -41,10 +47,14 @@ $resolverOptions = [
     ],
 ];
 
-$ipResolverFactory = SimpleIPAddressResolverFactory::create(HttpClient::create(), $resolverOptions);
-$vpnDetectorBuilder = (new SimpleVPNDetectorBuilder())->withRemoteIPAddressResolver($ipResolverFactory->build(IPAddressResolvers::IPIFY)->build());
+$ipResolverFactory      = SimpleIPAddressResolverFactory::create(HttpClient::create(), $resolverOptions);
+$vpnDetectorBuilder     = (new SimpleVPNDetectorBuilder())->withRemoteIPAddressResolver($ipResolverFactory->build(IPAddressResolvers::IPIFY)->build());
 
-$app = new OptionAwareApplication('VPNDetector', '0.1.0');
-$app->add(new VPNDetectorCommand($ipResolverFactory, $vpnDetectorBuilder));
+$logger                 = (new Logger('VPN'))->pushProcessor(new MemoryUsageProcessor());
+$loggerFormatterFactory = new NormalizedFormatterFactory(new ConsoleFormatterFactory(), new JsonSerializableNormalizer());
+
+$app = new OptionAwareApplication('VPN Detector', '0.1.0');
+$app->add(new VPNDetectorCommand($ipResolverFactory, $vpnDetectorBuilder, IPAddressResolvers::FIXED, $logger));
 $app->setDefaultCommand(VPNDetectorCommand::NAME, true);
+$app->registerOption(ConsoleLoggerFormatApplicationOption::build($logger, $loggerFormatterFactory));
 $app->run();

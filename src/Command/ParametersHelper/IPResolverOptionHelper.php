@@ -29,16 +29,20 @@ final class IPResolverOptionHelper
                 null,
                 InputOption::VALUE_REQUIRED,
                 sprintf('The IP resolver to use [ <info>%s</> ]', implode('</> | <info>', self::ALLOWED_RESOLVERS)),
-                IPAddressResolvers::FIXED,
+                null,
                 self::ALLOWED_RESOLVERS
             ),
         ];
     }
 
-    public static function getResolverName(InputInterface $input): string
+    public static function getResolverName(InputInterface $input): ?string
     {
-        /** @var string $resolverName */
+        /** @var ?string $resolverName */
         $resolverName = $input->getOption(self::ARG_RESOLVER);
+        if ($resolverName === null) {
+            return null;
+        }
+
         Assert::that($resolverName)
             ->string()
             ->inArray(self::ALLOWED_RESOLVERS);
