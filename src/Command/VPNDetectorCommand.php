@@ -14,6 +14,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use VPNDetector\Builder\IPAddressResolver\IPAddressResolvers;
 use VPNDetector\Builder\IPAddressResolverFactory;
 use VPNDetector\Builder\VPNDetectorBuilder;
+use VPNDetector\Command\ParametersHelper\ConfigFileOptionHelper;
 use VPNDetector\Command\ParametersHelper\IPResolverOptionHelper;
 use VPNDetector\Command\ParametersHelper\IPResolverOptionsOptionHelper;
 use VPNDetector\Exception\IPAddressResolvingException;
@@ -36,19 +37,20 @@ final class VPNDetectorCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $factory      = ConfigFileOptionHelper::getFactory($input)      ?? $this->ipAddressResolverFactory;
+        $resolverName = IPResolverOptionHelper::getResolverName($input) ?? $factory->getDefaultResolver();
         $options      = IPResolverOptionsOptionHelper::getOptions($input);
-        $resolverName = IPResolverOptionHelper::getResolverName($input) ?? $this->ipAddressResolverFactory->getDefaultResolver();
 
         $this->logger->info('Using IP resolver', ['resolver' => $resolverName, 'options'  => $options]);
 
         $this->vpnDetectorBuilder->withRemoteIPAddressResolver(
-            $this->ipAddressResolverFactory
+            $factory
                 ->getResolverBuilderFor(IPAddressResolvers::IPIFY)
                 ->build()
         );
 
         $this->vpnDetectorBuilder->withLocalIPAddressResolver(
-            $this->ipAddressResolverFactory
+            $factory
                 ->getResolverBuilderFor($resolverName)
                 ->withOptions($options)
                 ->build()
@@ -70,6 +72,7 @@ final class VPNDetectorCommand extends Command
                 new InputDefinition([
                     ...IPResolverOptionsOptionHelper::optionsDefinition(),
                     ...IPResolverOptionHelper::optionsDefinition(),
+                    ...ConfigFileOptionHelper::optionsDefinition(),
                 ])
             );
     }
