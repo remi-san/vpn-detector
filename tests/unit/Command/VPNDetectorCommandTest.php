@@ -8,6 +8,7 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Exception\ExceptionInterface;
 use Symfony\Component\Console\Input\StringInput;
+use VPNDetector\Builder\IPAddressResolver\IPAddressResolvers;
 use VPNDetector\Builder\IPAddressResolverBuilder;
 use VPNDetector\Builder\IPAddressResolverFactory;
 use VPNDetector\Builder\VPNDetectorBuilder;
@@ -75,9 +76,24 @@ final class VPNDetectorCommandTest extends TestCase
 
 final class TestIPAddressResolverFactory implements IPAddressResolverFactory
 {
-    public function build(string $resolver): IPAddressResolverBuilder
+    public function getResolverBuilderFor(string $resolver): IPAddressResolverBuilder
     {
         return new TestIPAddressResolverBuilder();
+    }
+
+    public function addResolverBuilder(string $resolverName, callable $builder, array $defaultOptions = []): self
+    {
+        return $this;
+    }
+
+    public function setDefaultResolver(string $resolverName): self
+    {
+        return $this;
+    }
+
+    public function getDefaultResolver(): string
+    {
+        return IPAddressResolvers::FIXED;
     }
 }
 

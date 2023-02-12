@@ -12,7 +12,6 @@
         "remi-san/monolog-extended": "dev-main",
         "remi-san/symfony-console-extended": "dev-main",
         "symfony/console": "^6.2",
-        "symfony/dotenv": "^6.2",
         "symfony/http-client": "^6.2"
     },
     "require-dev": {

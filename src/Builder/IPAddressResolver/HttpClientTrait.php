@@ -9,7 +9,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 trait HttpClientTrait
 {
-    protected readonly HttpClientInterface $httpClient;
+    protected HttpClientInterface $httpClient;
 
     public function __construct(HttpClientInterface $httpClient = null)
     {

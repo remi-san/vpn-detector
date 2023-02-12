@@ -26,7 +26,6 @@ final class VPNDetectorCommand extends Command
     public function __construct(
         private readonly IPAddressResolverFactory $ipAddressResolverFactory,
         private readonly VPNDetectorBuilder $vpnDetectorBuilder,
-        private readonly string $defaultResolver = IPAddressResolvers::FIXED,
         private readonly LoggerInterface $logger = new NullLogger()
     ) {
         parent::__construct();
@@ -38,12 +37,22 @@ final class VPNDetectorCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $options      = IPResolverOptionsOptionHelper::getOptions($input);
-        $resolverName = IPResolverOptionHelper::getResolverName($input) ?? $this->defaultResolver;
+        $resolverName = IPResolverOptionHelper::getResolverName($input) ?? $this->ipAddressResolverFactory->getDefaultResolver();
 
         $this->logger->info('Using IP resolver', ['resolver' => $resolverName, 'options'  => $options]);
 
-        $resolver     = $this->ipAddressResolverFactory->build($resolverName)->withOptions($options)->build();
-        $this->vpnDetectorBuilder->withLocalIPAddressResolver($resolver);
+        $this->vpnDetectorBuilder->withRemoteIPAddressResolver(
+            $this->ipAddressResolverFactory
+                ->getResolverBuilderFor(IPAddressResolvers::IPIFY)
+                ->build()
+        );
+
+        $this->vpnDetectorBuilder->withLocalIPAddressResolver(
+            $this->ipAddressResolverFactory
+                ->getResolverBuilderFor($resolverName)
+                ->withOptions($options)
+                ->build()
+        );
 
         $output->writeln(
             $this->vpnDetectorBuilder->build()->isBehindVpn() ?

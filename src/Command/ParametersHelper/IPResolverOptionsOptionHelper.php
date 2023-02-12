@@ -30,16 +30,16 @@ final class IPResolverOptionsOptionHelper
     }
 
     /**
-     * @return array{ip: string|null, url: string|null, username: string|null, password: string|null}
+     * @return array{ip?: string, url?: string, username?: string, password?: string}
      */
     public static function getOptions(InputInterface $input): array
     {
-        return [
+        return array_filter([
             IPAddressResolver::IP_PARAM       => self::getOption($input, self::ARG_IP_ADDRESS),
             IPAddressResolver::URL_PARAM      => self::getOption($input, self::ARG_RESOLVER_URL),
             IPAddressResolver::USER_PARAM     => self::getOption($input, self::ARG_RESOLVER_USERNAME),
             IPAddressResolver::PASSWORD_PARAM => self::getOption($input, self::ARG_RESOLVER_PASSWORD),
-        ];
+        ]);
     }
 
     private static function getOption(InputInterface $input, string $optionName): ?string

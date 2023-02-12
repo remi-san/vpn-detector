@@ -3,58 +3,51 @@
 
 declare(strict_types=1);
 
-
 use Monolog\Extended\Formatter\Factory\NormalizedFormatterFactory;
 use Monolog\Extended\Normalizer\JsonSerializableNormalizer;
 use Monolog\Processor\MemoryUsageProcessor;use Symfony\Bridge\Monolog\Logger;
 use Symfony\Component\Console\Extended\Logger\Formatter\Factory\ConsoleFormatterFactory;
 use Symfony\Component\Console\Extended\Option\ConsoleLoggerFormatApplicationOption;
 use Symfony\Component\Console\Extended\OptionAwareApplication;
-use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\HttpClient\HttpClient;
 use VPNDetector\Builder\IPAddressResolver\IPAddressResolvers;
+use VPNDetector\Builder\IPAddressResolverFactory;
 use VPNDetector\Builder\SimpleIPAddressResolverFactory;
 use VPNDetector\Builder\SimpleVPNDetectorBuilder;
 use VPNDetector\Command\VPNDetectorCommand;
-use VPNDetector\IPAddressResolver;
 
 $autoloadFiles = [
     $GLOBALS['_composer_autoload_path'] ?? null, // composer var
-    __DIR__ . '/../../../autoload.php', // composer bin
+    __DIR__ . '/../../../autoload.php', // composer dir
     __DIR__ . '/../vendor/autoload.php', // local
 ];
-
 foreach ($autoloadFiles as $autoloadFile) {
     if ($autoloadFile !== null && file_exists($autoloadFile)) {
         require $autoloadFile;
+        break;
     }
 }
 
-$dotenv = new Dotenv();
-try {
-    @$dotenv->loadEnv('.env');
-} catch (\Throwable $e) {
+/** @var ?IPAddressResolverFactory $ipResolverFactory */
+$ipResolverFactory = null;
+$configFiles = [
+    '.vpn-detector.php', // current dir
+    __DIR__ . '/../../../../.vpn-detector.php', // composer dir
+    __DIR__ . '/../.vpn-detector.php', // local
+];
+foreach ($configFiles as $configFile) {
+    if (file_exists($configFile)) {
+        $ipResolverFactory =  (require $configFile)();
+        break;
+    }
 }
 
-$resolverOptions = [
-    IPAddressResolvers::LIVEBOX => [
-        IPAddressResolver::URL_PARAM      => $_ENV['LIVEBOX_URL'] ?? null,
-        IPAddressResolver::USER_PARAM     => $_ENV['LIVEBOX_USR'] ?? null,
-        IPAddressResolver::PASSWORD_PARAM => $_ENV['LIVEBOX_PWD'] ?? null,
-    ],
-    IPAddressResolvers::FIXED  => [
-        IPAddressResolver::IP_PARAM       => $_ENV['FIXED_IP']    ?? null,
-    ],
-];
-
-$ipResolverFactory      = SimpleIPAddressResolverFactory::create(HttpClient::create(), $resolverOptions);
-$vpnDetectorBuilder     = (new SimpleVPNDetectorBuilder())->withRemoteIPAddressResolver($ipResolverFactory->build(IPAddressResolvers::IPIFY)->build());
-
-$logger                 = (new Logger('VPN'))->pushProcessor(new MemoryUsageProcessor());
-$loggerFormatterFactory = new NormalizedFormatterFactory(new ConsoleFormatterFactory(), new JsonSerializableNormalizer());
+$ipResolverFactory  ??= SimpleIPAddressResolverFactory::create(HttpClient::create());
+$vpnDetectorBuilder   = new SimpleVPNDetectorBuilder();
+$logger               = (new Logger('VPN'))->pushProcessor(new MemoryUsageProcessor());
 
 $app = new OptionAwareApplication('VPN Detector', '0.1.0');
-$app->add(new VPNDetectorCommand($ipResolverFactory, $vpnDetectorBuilder, IPAddressResolvers::FIXED, $logger));
+$app->add(new VPNDetectorCommand($ipResolverFactory, $vpnDetectorBuilder, $logger));
 $app->setDefaultCommand(VPNDetectorCommand::NAME, true);
-$app->registerOption(ConsoleLoggerFormatApplicationOption::build($logger, $loggerFormatterFactory));
+$app->registerOption(ConsoleLoggerFormatApplicationOption::build($logger, new NormalizedFormatterFactory(new ConsoleFormatterFactory(), new JsonSerializableNormalizer())));
 $app->run();
