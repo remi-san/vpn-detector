@@ -6,7 +6,7 @@ namespace VPNDetector;
 
 use Assert\Assert;
 
-final readonly class IPAddress
+final readonly class IPAddress implements \Stringable
 {
     public function __construct(public ?string $ipv4, public ?string $ipv6)
     {
@@ -42,5 +42,10 @@ final readonly class IPAddress
         }
 
         throw new \InvalidArgumentException('Invalid IP address.');
+    }
+
+    public function __toString(): string
+    {
+        return (string) ($this->ipv4 ?? $this->ipv6);
     }
 }

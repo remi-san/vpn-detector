@@ -14,6 +14,7 @@ use VPNDetector\Builder\IPAddressResolver\IPAddressResolvers;
 use VPNDetector\Builder\IPAddressResolverFactory;
 use VPNDetector\Builder\SimpleIPAddressResolverFactory;
 use VPNDetector\Builder\SimpleVPNDetectorBuilder;
+use VPNDetector\Command\ResolveIPCommand;
 use VPNDetector\Command\VPNDetectorCommand;
 
 $autoloadFiles = [
@@ -48,6 +49,7 @@ $logger               = (new Logger('VPN'))->pushProcessor(new MemoryUsageProces
 
 $app = new OptionAwareApplication('VPN Detector', '0.1.0');
 $app->add(new VPNDetectorCommand($ipResolverFactory, $vpnDetectorBuilder, $logger));
-$app->setDefaultCommand(VPNDetectorCommand::NAME, true);
+$app->add(new ResolveIPCommand($ipResolverFactory, $logger));
+$app->setDefaultCommand(VPNDetectorCommand::NAME);
 $app->registerOption(ConsoleLoggerFormatApplicationOption::build($logger, new NormalizedFormatterFactory(new ConsoleFormatterFactory(), new JsonSerializableNormalizer())));
 $app->run();
