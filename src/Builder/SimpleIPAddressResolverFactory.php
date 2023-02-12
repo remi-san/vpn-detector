@@ -23,7 +23,8 @@ final class SimpleIPAddressResolverFactory implements IPAddressResolverFactory
      */
     private array $resolverBuilders;
 
-    private string $defaultResolver = IPAddressResolvers::FIXED;
+    private string $defaultLocalResolver  = IPAddressResolvers::FIXED;
+    private string $defaultRemoteResolver = IPAddressResolvers::IPIFY;
 
     /**
      * @param array<string, array<string, ?string>> $defaultOptions
@@ -67,16 +68,28 @@ final class SimpleIPAddressResolverFactory implements IPAddressResolverFactory
         return $this;
     }
 
-    public function setDefaultResolver(string $resolverName): self
+    public function setDefaultLocalResolver(string $resolverName): self
     {
-        $this->defaultResolver = $resolverName;
+        $this->defaultLocalResolver = $resolverName;
 
         return $this;
     }
 
-    public function getDefaultResolver(): string
+    public function setDefaultRemoteResolver(string $resolverName): IPAddressResolverFactory
     {
-        return $this->defaultResolver;
+        $this->defaultRemoteResolver = $resolverName;
+
+        return $this;
+    }
+
+    public function getDefaultLocalResolver(): string
+    {
+        return $this->defaultLocalResolver;
+    }
+
+    public function getDefaultRemoteResolver(): string
+    {
+        return $this->defaultRemoteResolver;
     }
 
     public function getResolverBuilderFor(string $resolver): IPAddressResolverBuilder

@@ -14,9 +14,13 @@ interface IPAddressResolverFactory
      */
     public function addResolverBuilder(string $resolverName, callable $builder, array $defaultOptions = []): self;
 
-    public function setDefaultResolver(string $resolverName): self;
+    public function setDefaultLocalResolver(string $resolverName): self;
 
-    public function getDefaultResolver(): string;
+    public function setDefaultRemoteResolver(string $resolverName): self;
+
+    public function getDefaultLocalResolver(): string;
+
+    public function getDefaultRemoteResolver(): string;
 
     public function getResolverBuilderFor(string $resolver): IPAddressResolverBuilder;
 }

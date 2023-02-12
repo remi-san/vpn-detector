@@ -11,7 +11,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use VPNDetector\Builder\IPAddressResolver\IPAddressResolvers;
 use VPNDetector\Builder\IPAddressResolverFactory;
 use VPNDetector\Builder\VPNDetectorBuilder;
 use VPNDetector\Command\ParametersHelper\ConfigFileOptionHelper;
@@ -37,21 +36,21 @@ final class VPNDetectorCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $factory      = ConfigFileOptionHelper::getFactory($input)      ?? $this->ipAddressResolverFactory;
-        $resolverName = IPResolverOptionHelper::getResolverName($input) ?? $factory->getDefaultResolver();
-        $options      = IPResolverOptionsOptionHelper::getOptions($input);
+        $factory           = ConfigFileOptionHelper::getFactory($input)      ?? $this->ipAddressResolverFactory;
+        $localResolverName = IPResolverOptionHelper::getResolverName($input) ?? $factory->getDefaultLocalResolver();
+        $options           = IPResolverOptionsOptionHelper::getOptions($input);
 
-        $this->logger->info('Using IP resolver', ['resolver' => $resolverName, 'options'  => $options]);
+        $this->logger->info('Using IP resolver', ['resolver' => $localResolverName, 'options'  => $options]);
 
         $this->vpnDetectorBuilder->withRemoteIPAddressResolver(
             $factory
-                ->getResolverBuilderFor(IPAddressResolvers::IPIFY)
+                ->getResolverBuilderFor($factory->getDefaultRemoteResolver())
                 ->build()
         );
 
         $this->vpnDetectorBuilder->withLocalIPAddressResolver(
             $factory
-                ->getResolverBuilderFor($resolverName)
+                ->getResolverBuilderFor($localResolverName)
                 ->withOptions($options)
                 ->build()
         );

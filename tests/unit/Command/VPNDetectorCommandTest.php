@@ -86,12 +86,22 @@ final class TestIPAddressResolverFactory implements IPAddressResolverFactory
         return $this;
     }
 
-    public function setDefaultResolver(string $resolverName): self
+    public function setDefaultLocalResolver(string $resolverName): self
     {
         return $this;
     }
 
-    public function getDefaultResolver(): string
+    public function setDefaultRemoteResolver(string $resolverName): self
+    {
+        return $this;
+    }
+
+    public function getDefaultLocalResolver(): string
+    {
+        return IPAddressResolvers::FIXED;
+    }
+
+    public function getDefaultRemoteResolver(): string
     {
         return IPAddressResolvers::FIXED;
     }
